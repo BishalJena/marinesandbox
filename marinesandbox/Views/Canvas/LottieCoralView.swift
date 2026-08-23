@@ -35,11 +35,12 @@ struct LottieCoralView: UIViewRepresentable {
         let assetName = CoralLifecycle.assetName(species: species, id: coralID)
         let theme = CoralLifecycle.theme(for: coralID)
         let targetFrame = Float(CoralLifecycle.frame(for: growthProgress, species: species))
+        let isDefaultTheme = theme.isEmpty || theme == "default" || theme == "blue"
 
         let config = AnimationConfig(
             autoplay: false,
             loop: false,
-            themeId: theme
+            themeId: isDefaultTheme ? nil : theme
         )
 
         let dotLottie: DotLottieAnimation
@@ -73,7 +74,12 @@ struct LottieCoralView: UIViewRepresentable {
 
         if context.coordinator.theme != theme {
             context.coordinator.theme = theme
-            _ = dotLottie.setTheme(theme)
+            let isDefaultTheme = theme.isEmpty || theme == "default" || theme == "blue"
+            if !isDefaultTheme {
+                _ = dotLottie.setTheme(theme)
+            } else {
+                _ = dotLottie.setTheme("")
+            }
         }
 
         if let playbackProgress {
@@ -108,7 +114,7 @@ struct LottieCoralView: UIViewRepresentable {
         func onLoad() {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                if !self.theme.isEmpty {
+                if !self.theme.isEmpty && self.theme != "default" && self.theme != "blue" {
                     _ = self.dotLottie?.setTheme(self.theme)
                 }
                 _ = self.dotLottie?.setFrame(frame: self.targetFrame)

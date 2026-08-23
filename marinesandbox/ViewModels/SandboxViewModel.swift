@@ -106,7 +106,14 @@ public final class SandboxViewModel {
             return
         }
 
-        let survivor = CoralFrag(species: "Acropora", xPos: 120, yPos: 35, growthProgress: 0.0)
+        let survivor = CoralFrag(
+            id: UUID(uuidString: "00000000-0000-0000-0000-000000000000") ?? UUID(),
+            species: "Acropora",
+            xPos: 120,
+            yPos: 35,
+            isPlanted: false,
+            growthProgress: 0.0
+        )
         let canvas = ReefCanvas(ngoRegion: config.regionName, coralFrags: [survivor])
         modelContext.insert(canvas)
         self.canvas = canvas

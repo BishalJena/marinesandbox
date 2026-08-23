@@ -57,7 +57,7 @@ public enum CoralLifecycle {
     }
 
     public static func theme(for id: UUID) -> String {
-        let themes = ["pink", "purple", "yellow"]
+        let themes = ["default", "pink", "purple", "yellow"]
         let u = id.uuid
         let sum = Int(u.1) ^ Int(u.3) ^ Int(u.5) ^ Int(u.7) ^ Int(u.9) ^ Int(u.11) ^ Int(u.13) ^ Int(u.15)
         return themes[abs(sum) % themes.count]
