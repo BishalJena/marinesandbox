@@ -105,6 +105,7 @@ extension SandboxViewModel {
         let drop = Physics.clampedDrop(liftedFragPosition, canvasWidth: canvas.canvasWidth)
         frag.xPos = drop.x
         frag.yPos = restingHeight(forDropHeight: liftedFragPosition.y, atX: drop.x)
+        frag.isPlanted = true
         canvas.guidedPlantDone = true
         liftedFragID = nil
         rubblePieces.removeAll()
@@ -124,10 +125,10 @@ extension SandboxViewModel {
 
     /// Plants a frag on the seabed at a canvas-space point (DEC-024: direct planting).
     @discardableResult
-    public func plantFrag(species: String, at point: CGPoint) -> CoralFrag? {
+    public func plantFrag(species: String, at point: CGPoint, colorTheme: String = "default") -> CoralFrag? {
         guard let canvas, config.availableSpecies.contains(species) else { return nil }
         let drop = Physics.clampedDrop(point, canvasWidth: canvas.canvasWidth)
-        let frag = CoralFrag(species: species, xPos: drop.x, yPos: drop.y)
+        let frag = CoralFrag(species: species, xPos: drop.x, yPos: drop.y, isPlanted: true, colorTheme: colorTheme)
         modelContext.insert(frag)
         canvas.coralFrags.append(frag)
         save()
@@ -138,6 +139,7 @@ extension SandboxViewModel {
     public func settleFrag(id: UUID, fromDropHeight dropHeight: Double) {
         guard let frag = canvas?.coralFrags.first(where: { $0.id == id }) else { return }
         frag.yPos = restingHeight(forDropHeight: dropHeight, atX: frag.xPos)
+        frag.isPlanted = true
         save()
     }
 
@@ -166,6 +168,8 @@ extension SandboxViewModel {
             species: "Acropora",
             xPos: 120,
             yPos: 35,
+            isPlanted: false,
+            colorTheme: "default",
             growthProgress: 0.0
         )
         modelContext.insert(survivor)
