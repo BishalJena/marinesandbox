@@ -123,8 +123,8 @@ public enum EcoEngine {
         let herbivoreRecruitment = Double(herbivoreCount) * (1.0 + beta * H)
         let predatorRecruitment = Double(predatorCount) * (1.0 + beta * H)
 
-        // Calculate spatial crowding per living coral on the seabed (yPos < 60.0)
-        let seabedCorals = Array(state.corals.enumerated().filter { !$0.element.isDead && $0.element.yPos < 60.0 })
+        // Calculate spatial crowding per living coral on the seabed
+        let seabedCorals = Array(state.corals.enumerated().filter { !$0.element.isDead && CoralGeometry.isCoralInSeabedHitbox(coral: $0.element) })
         var crowdingFactors = [Double](repeating: 0.0, count: state.corals.count)
 
         for (idxA, item1) in seabedCorals.enumerated() {
@@ -140,8 +140,8 @@ public enum EcoEngine {
 
         for index in state.corals.indices {
             guard !state.corals[index].isDead else { continue }
-            // Only corals settled on the seabed (yPos < 60.0) grow and interact with algae
-            guard state.corals[index].yPos < 60.0 else { continue }
+            // Only corals that rest within the seabed hitbox calcify, grow, and interact with algae
+            guard CoralGeometry.isCoralInSeabedHitbox(coral: state.corals[index]) else { continue }
 
             let crowding = min(1.0, crowdingFactors[index])
             let crowdingGrowthModifier = max(0.4, 1.0 - 0.4 * crowding)

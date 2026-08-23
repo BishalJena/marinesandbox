@@ -109,6 +109,7 @@ extension SandboxViewModel {
                 species: species,
                 xPos: spawnX,
                 yPos: 380.0,
+                isPlanted: false,
                 growthProgress: 0.0
             )
             modelContext.insert(floatingFrag)

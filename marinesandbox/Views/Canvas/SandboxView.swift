@@ -113,7 +113,7 @@ struct SandboxView: View {
             let footprint = CoralGeometry.footprint(for: coral)
             let isSurvivor = frag.id == viewModel.survivorFrag?.id
             let isLifted = viewModel.liftedFragID == frag.id
-            let isFloating = (frag.yPos > 60 && frag.growthProgress == 0 && !isLifted)
+            let isFloating = (!frag.isPlanted && !isLifted)
             let assetName = footprint.assetName
             let screenX = (isLifted ? viewModel.liftedFragPosition.x : coral.xPos) + seabedOffset
             let baseY = seabedY - (isLifted ? viewModel.liftedFragPosition.y : coral.yPos)

@@ -37,6 +37,9 @@ public struct CoralState: Identifiable, Equatable, Sendable {
     public var xPos: Double
     public var yPos: Double
 
+    /// Whether this fragment is firmly planted in the seabed (true) or floating/unplanted in the water column (false).
+    public var isPlanted: Bool
+
     /// `0.0` freshly planted fragment to `1.0` mature adult colony.
     /// Accumulates *effective* healthy time, not wall time — algae and pest slowdown
     /// modifiers (DEC-031) make a neglected coral take longer than 7 days to mature.
@@ -63,6 +66,7 @@ public struct CoralState: Identifiable, Equatable, Sendable {
         species: String,
         xPos: Double = 0,
         yPos: Double = 0,
+        isPlanted: Bool = true,
         growthProgress: Double = 0,
         plantedAt: Date = Date(),
         coverage: AlgaeCoverage = AlgaeCoverage(),
@@ -75,6 +79,7 @@ public struct CoralState: Identifiable, Equatable, Sendable {
         self.species = species
         self.xPos = xPos
         self.yPos = yPos
+        self.isPlanted = isPlanted
         self.growthProgress = growthProgress
         self.plantedAt = plantedAt
         self.coverage = coverage

@@ -144,6 +144,7 @@ public final class SandboxViewModel {
                 species: frag.species,
                 xPos: frag.xPos,
                 yPos: frag.yPos,
+                isPlanted: frag.isPlanted,
                 growthProgress: frag.growthProgress,
                 plantedAt: frag.plantedAt,
                 coverage: AlgaeCoverage(cells: frag.algaeCells),
@@ -170,6 +171,7 @@ public final class SandboxViewModel {
                 frag.species = coral.species
                 frag.xPos = coral.xPos
                 frag.yPos = coral.yPos
+                frag.isPlanted = coral.isPlanted
                 frag.growthProgress = coral.growthProgress
                 frag.plantedAt = coral.plantedAt
                 frag.algaeCells = coral.coverage.cells
@@ -183,6 +185,7 @@ public final class SandboxViewModel {
                     species: coral.species,
                     xPos: coral.xPos,
                     yPos: coral.yPos,
+                    isPlanted: coral.isPlanted,
                     growthProgress: coral.growthProgress,
                     plantedAt: coral.plantedAt,
                     algaeCells: coral.coverage.cells,
@@ -233,6 +236,7 @@ extension CoralFrag {
             species: species,
             xPos: xPos,
             yPos: yPos,
+            isPlanted: isPlanted,
             growthProgress: growthProgress,
             plantedAt: plantedAt,
             coverage: AlgaeCoverage(cells: algaeCells),
