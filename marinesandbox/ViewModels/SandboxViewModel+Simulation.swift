@@ -88,17 +88,21 @@ extension SandboxViewModel {
         diagnosticMessage = Self.diagnose(before: before, after: outcome)
     }
 
-    /// Spawns a new random living coral fragment floating in open water whenever a coral reaches Teenage phase.
+    /// Spawns a new living coral fragment floating in open water whenever a coral reaches Teenage phase.
+    /// In early gameplay, rewards Staghorn corals; unlocks Brain Coral after 5+ living Staghorns are planted.
     public func checkTeenageSpawns() {
         guard let canvas, canvas.guidedPlantDone else { return }
         for frag in canvas.coralFrags {
             guard !frag.isDead, (frag.isTeenager || frag.isAdult), !rewardedTeenageCoralIDs.contains(frag.id) else { continue }
             rewardedTeenageCoralIDs.insert(frag.id)
 
-            let allSpecies = config.availableSpecies.isEmpty
-                ? ["Acropora", "BrainCoral", "ElkhornCoral", "SpongeCoral", "StaghornCoral", "TableCoral"]
-                : config.availableSpecies
-            let species = allSpecies.randomElement() ?? "Acropora"
+            let staghornCount = canvas.coralFrags.filter { !$0.isDead && ($0.species == "Acropora" || $0.species == "StaghornCoral") }.count
+            let species: String
+            if staghornCount >= 5 && Double.random(in: 0...1) < 0.45 {
+                species = "BrainCoral"
+            } else {
+                species = "Acropora"
+            }
 
             let spawnX = min(max(80.0, frag.xPos + Double.random(in: -140...140)), canvas.canvasWidth - 80.0)
             let floatingFrag = CoralFrag(

@@ -118,7 +118,7 @@ struct SandboxView: View {
             let screenX = (isLifted ? viewModel.liftedFragPosition.x : coral.xPos) + seabedOffset
             let baseY = seabedY - (isLifted ? viewModel.liftedFragPosition.y : coral.yPos)
 
-            ZStack {
+            ZStack(alignment: .bottom) {
                 if isFloating {
                     Circle()
                         .fill(RadialGradient(
@@ -154,7 +154,7 @@ struct SandboxView: View {
                     )
                 }
             }
-            .frame(width: footprint.size.width, height: footprint.size.height)
+            .frame(width: footprint.size.width, height: footprint.size.height, alignment: .bottom)
             .contentShape(Rectangle())
             .position(x: screenX, y: baseY - footprint.size.height / 2)
             .gesture(
@@ -201,7 +201,8 @@ struct SandboxView: View {
         if frag.isDead {
             Image(assetName)
                 .resizable()
-                .frame(width: footprint.size.width, height: footprint.size.height)
+                .scaledToFit()
+                .frame(width: footprint.size.width, height: footprint.size.height, alignment: .bottom)
                 .saturation(0)
                 .opacity(0.5)
         } else {
@@ -215,7 +216,7 @@ struct SandboxView: View {
                 playbackProgress: viewModel.lottiePlaybackTargets[frag.id],
                 onPlaybackCompleted: { viewModel.completeLottiePlayback(for: frag.id) }
             )
-            .frame(width: footprint.size.width, height: footprint.size.height)
+            .frame(width: footprint.size.width, height: footprint.size.height, alignment: .bottom)
         }
     }
 

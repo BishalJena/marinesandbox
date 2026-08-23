@@ -26,6 +26,7 @@ extension SandboxViewModel {
     public func applyBrushSegment(from start: CGPoint, to end: CGPoint, seabedY: Double) -> [Int] {
         guard let frag = coral(atCanvasPoint: start, seabedY: seabedY)
                 ?? coral(atCanvasPoint: end, seabedY: seabedY) else { return [] }
+        AudioPlayerService.shared.playSFX("brush_swipe", volume: 0.50)
         let snapshot = frag.snapshotForInteraction
         guard let localStart = CoralGeometry.localPoint(in: snapshot, canvasPoint: start, seabedY: seabedY)
                 ?? CoralGeometry.localPoint(in: snapshot, canvasPoint: end, seabedY: seabedY),
@@ -44,7 +45,6 @@ extension SandboxViewModel {
         let cleared = coverage.clear(from: start, to: end)
         if !cleared.isEmpty {
             frag.algaeCells = coverage.cells
-            AudioPlayerService.shared.playSFX("brush_swipe")
             if hadAlgae && frag.algaePercentage <= 0.02 {
                 AudioPlayerService.shared.playSFX("sparkle_clean")
             }
