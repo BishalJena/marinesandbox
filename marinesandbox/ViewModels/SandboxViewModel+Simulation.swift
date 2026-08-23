@@ -104,7 +104,7 @@ extension SandboxViewModel {
             let floatingFrag = CoralFrag(
                 species: species,
                 xPos: spawnX,
-                yPos: 240.0,
+                yPos: 380.0,
                 growthProgress: 0.0
             )
             modelContext.insert(floatingFrag)

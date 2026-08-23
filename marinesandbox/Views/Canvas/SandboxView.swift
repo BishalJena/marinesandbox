@@ -112,15 +112,27 @@ struct SandboxView: View {
             let coral = frag.snapshotForInteraction
             let footprint = CoralGeometry.footprint(for: coral)
             let isSurvivor = frag.id == viewModel.survivorFrag?.id
-            let assetName = footprint.assetName
             let isLifted = viewModel.liftedFragID == frag.id
+            let isFloating = (frag.yPos > 60 && frag.growthProgress == 0 && !isLifted)
+            let assetName = footprint.assetName
             let screenX = (isLifted ? viewModel.liftedFragPosition.x : coral.xPos) + seabedOffset
             let baseY = seabedY - (isLifted ? viewModel.liftedFragPosition.y : coral.yPos)
 
             ZStack {
+                if isFloating {
+                    Circle()
+                        .fill(RadialGradient(
+                            colors: [Color.cyan.opacity(0.4), Color.clear],
+                            center: .center,
+                            startRadius: 5,
+                            endRadius: 50
+                        ))
+                        .frame(width: 100, height: 100)
+                }
+
                 coralArtView(viewModel: viewModel, frag: frag, assetName: assetName, footprint: footprint)
                     .scaleEffect(isLifted ? 1.15 : 1.0)
-                    .shadow(color: isLifted ? .white.opacity(0.6) : .clear, radius: 12)
+                    .shadow(color: isLifted ? .white.opacity(0.6) : (isFloating ? .cyan.opacity(0.85) : .clear), radius: isFloating ? 16 : 12)
                     .shadow(color: (isSurvivor && viewModel.isSurvivorUncovered) ? .yellow.opacity(0.9) : .clear, radius: 20)
 
                 if !frag.isDead && frag.algaePercentage > 0.02 {
@@ -248,7 +260,7 @@ struct SandboxView: View {
                     }
 
                     let fallDistance = max(0, dropHeight - resting)
-                    let hitGroundDelay = fallDistance < 20 ? 0.05 : min(0.40, response * 0.35)
+                    let hitGroundDelay = fallDistance < 30 ? 0.01 : min(0.08, fallDistance / 1500.0)
                     DispatchQueue.main.asyncAfter(deadline: .now() + hitGroundDelay) {
                         AudioPlayerService.shared.playSFX("frag_plant")
                     }

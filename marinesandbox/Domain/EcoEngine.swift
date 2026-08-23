@@ -125,6 +125,8 @@ public enum EcoEngine {
 
         for index in state.corals.indices {
             guard !state.corals[index].isDead else { continue }
+            // Only corals settled on the seabed (yPos < 60.0) grow and interact with algae
+            guard state.corals[index].yPos < 60.0 else { continue }
 
             // --- A. GROWTH (slowed by algae + pest, DEC-031, species growth rate) ---
             let speciesMultiplier = speciesGrowthRateMultiplier(species: state.corals[index].species)
