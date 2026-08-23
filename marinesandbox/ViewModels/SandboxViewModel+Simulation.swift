@@ -104,10 +104,13 @@ extension SandboxViewModel {
 
             let staghornCount = canvas.coralFrags.filter { !$0.isDead && ($0.species == "Acropora" || $0.species == "StaghornCoral") }.count
             let species: String
+            let theme: String
             if staghornCount >= 5 && Double.random(in: 0...1) < 0.45 {
                 species = "BrainCoral"
+                theme = CoralLifecycle.randomTheme()
             } else {
                 species = "Acropora"
+                theme = "default"
             }
 
             let spawnX = min(max(80.0, frag.xPos + Double.random(in: -140...140)), canvas.canvasWidth - 80.0)
@@ -116,6 +119,7 @@ extension SandboxViewModel {
                 xPos: spawnX,
                 yPos: 380.0,
                 isPlanted: false,
+                colorTheme: theme,
                 growthProgress: 0.0
             )
             modelContext.insert(floatingFrag)

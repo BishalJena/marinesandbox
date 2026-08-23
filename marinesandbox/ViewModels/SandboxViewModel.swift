@@ -152,6 +152,7 @@ public final class SandboxViewModel {
                 xPos: frag.xPos,
                 yPos: frag.yPos,
                 isPlanted: frag.isPlanted,
+                colorTheme: frag.colorTheme,
                 growthProgress: frag.growthProgress,
                 plantedAt: frag.plantedAt,
                 coverage: AlgaeCoverage(cells: frag.algaeCells),
@@ -179,6 +180,7 @@ public final class SandboxViewModel {
                 frag.xPos = coral.xPos
                 frag.yPos = coral.yPos
                 frag.isPlanted = coral.isPlanted
+                frag.colorTheme = coral.colorTheme
                 frag.growthProgress = coral.growthProgress
                 frag.plantedAt = coral.plantedAt
                 frag.algaeCells = coral.coverage.cells
@@ -193,6 +195,7 @@ public final class SandboxViewModel {
                     xPos: coral.xPos,
                     yPos: coral.yPos,
                     isPlanted: coral.isPlanted,
+                    colorTheme: coral.colorTheme,
                     growthProgress: coral.growthProgress,
                     plantedAt: coral.plantedAt,
                     algaeCells: coral.coverage.cells,
@@ -244,6 +247,7 @@ extension CoralFrag {
             xPos: xPos,
             yPos: yPos,
             isPlanted: isPlanted,
+            colorTheme: colorTheme,
             growthProgress: growthProgress,
             plantedAt: plantedAt,
             coverage: AlgaeCoverage(cells: algaeCells),

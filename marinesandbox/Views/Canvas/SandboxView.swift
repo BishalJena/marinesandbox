@@ -212,6 +212,7 @@ struct SandboxView: View {
             LottieCoralView(
                 coralID: frag.id,
                 species: frag.species,
+                colorTheme: frag.colorTheme,
                 growthProgress: progress,
                 playbackProgress: viewModel.lottiePlaybackTargets[frag.id],
                 onPlaybackCompleted: { viewModel.completeLottiePlayback(for: frag.id) }

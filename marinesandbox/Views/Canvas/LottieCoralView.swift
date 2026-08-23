@@ -5,6 +5,7 @@ import SwiftUI
 struct LottieCoralView: UIViewRepresentable {
     let coralID: UUID
     let species: String
+    let colorTheme: String
     let growthProgress: Double
     let playbackProgress: Double?
     let onPlaybackCompleted: () -> Void
@@ -25,7 +26,7 @@ struct LottieCoralView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(
             species: species,
-            theme: CoralLifecycle.theme(for: coralID),
+            theme: colorTheme,
             growthProgress: growthProgress,
             onPlaybackCompleted: onPlaybackCompleted
         )
@@ -33,14 +34,13 @@ struct LottieCoralView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> DotLottieAnimationView {
         let assetName = CoralLifecycle.assetName(species: species, id: coralID)
-        let theme = CoralLifecycle.theme(for: coralID)
         let targetFrame = Float(CoralLifecycle.frame(for: growthProgress, species: species))
-        let isDefaultTheme = theme.isEmpty || theme == "default" || theme == "blue"
+        let isDefaultTheme = colorTheme.isEmpty || colorTheme == "default" || colorTheme == "blue"
 
         let config = AnimationConfig(
             autoplay: false,
             loop: false,
-            themeId: isDefaultTheme ? nil : theme
+            themeId: isDefaultTheme ? nil : colorTheme
         )
 
         let dotLottie: DotLottieAnimation
@@ -57,7 +57,7 @@ struct LottieCoralView: UIViewRepresentable {
 
         context.coordinator.dotLottie = dotLottie
         context.coordinator.targetFrame = targetFrame
-        context.coordinator.theme = theme
+        context.coordinator.theme = colorTheme
         context.coordinator.species = species
         dotLottie.subscribe(observer: context.coordinator)
 
@@ -66,17 +66,16 @@ struct LottieCoralView: UIViewRepresentable {
 
     func updateUIView(_ uiView: DotLottieAnimationView, context: Context) {
         let targetFrame = Float(CoralLifecycle.frame(for: growthProgress, species: species))
-        let theme = CoralLifecycle.theme(for: coralID)
         context.coordinator.targetFrame = targetFrame
         context.coordinator.species = species
 
         guard let dotLottie = context.coordinator.dotLottie else { return }
 
-        if context.coordinator.theme != theme {
-            context.coordinator.theme = theme
-            let isDefaultTheme = theme.isEmpty || theme == "default" || theme == "blue"
+        if context.coordinator.theme != colorTheme {
+            context.coordinator.theme = colorTheme
+            let isDefaultTheme = colorTheme.isEmpty || colorTheme == "default" || colorTheme == "blue"
             if !isDefaultTheme {
-                _ = dotLottie.setTheme(theme)
+                _ = dotLottie.setTheme(colorTheme)
             } else {
                 _ = dotLottie.setTheme("")
             }
