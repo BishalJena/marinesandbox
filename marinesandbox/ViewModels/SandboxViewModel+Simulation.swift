@@ -82,7 +82,13 @@ extension SandboxViewModel {
         }
         commit(outcome)
         lottiePlaybackTargets = Dictionary(uniqueKeysWithValues: outcome.corals.map { ($0.id, $0.growthProgress) })
-        spawnPestsIfNeeded(elapsed: Self.fastForwardInterval)
+        if let canvas {
+            for frag in canvas.coralFrags where !frag.isDead && (frag.isBaby || frag.isTeenager) {
+                if frag.activePredators.count < Self.pestCapPerCoral && Double.random(in: 0...1) < 0.6 {
+                    frag.activePredators.append("DrupellaSnail")
+                }
+            }
+        }
         checkTeenageSpawns()
         pendingDiagnostic = outcome
         diagnosticMessage = Self.diagnose(before: before, after: outcome)

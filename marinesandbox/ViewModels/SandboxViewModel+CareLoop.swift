@@ -57,18 +57,21 @@ extension SandboxViewModel {
 
     /// Spawns Drupella snails crawling from off-screen margins toward eligible corals (DEC-034).
     public func spawnPestsIfNeeded(
-        elapsed: TimeInterval,
-        random: Double = Double.random(in: 0...1)
+        elapsed: TimeInterval
     ) {
         guard let canvas, elapsed > 0 else { return }
-        let chance = min(1.0, Self.pestSpawnChancePerSecond * elapsed * 2.0)
+        let threatMultiplier = threats.agriculturalRunoff ? 2.0 : 1.0
+        // Live spawn rate: ~1 spawn attempt every 20s per eligible vulnerable coral during live gameplay
+        let chance = min(1.0, (1.0 / 20.0) * elapsed * threatMultiplier)
+
         for frag in canvas.coralFrags {
-            guard !frag.isDead, frag.isBaby || frag.isTeenager else { continue }
+            guard !frag.isDead, (frag.isBaby || frag.isTeenager) else { continue }
             let existingCount = frag.activePredators.count + crawlingSnails.filter({ $0.targetFragID == frag.id }).count
-            guard existingCount < Self.pestCapPerCoral, random < chance else { continue }
+            guard existingCount < Self.pestCapPerCoral else { continue }
+            guard Double.random(in: 0...1) < chance else { continue }
 
             let fromLeft = Bool.random()
-            let startX = fromLeft ? max(20.0, frag.xPos - 350.0) : min(canvas.canvasWidth - 20.0, frag.xPos + 350.0)
+            let startX = fromLeft ? max(20.0, frag.xPos - 280.0) : min(canvas.canvasWidth - 20.0, frag.xPos + 280.0)
             let snail = CrawlingSnail(
                 targetFragID: frag.id,
                 startX: startX,
@@ -87,7 +90,7 @@ extension SandboxViewModel {
         guard let canvas else { return }
         var arrivedIndices: [Int] = []
         for i in crawlingSnails.indices {
-            crawlingSnails[i].progress += dt / 3.0
+            crawlingSnails[i].progress += dt / 7.0
             let p = min(1.0, crawlingSnails[i].progress)
             crawlingSnails[i].currentX = crawlingSnails[i].startX + (crawlingSnails[i].targetX - crawlingSnails[i].startX) * p
             if p >= 1.0 {
