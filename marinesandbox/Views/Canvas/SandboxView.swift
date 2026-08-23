@@ -285,6 +285,11 @@ struct SandboxView: View {
     private func handleCoralTap(viewModel: SandboxViewModel, frag: CoralFrag) {
         if viewModel.guidedPlantPhase == .awaitingFragTap, frag.id == viewModel.survivorFrag?.id {
             viewModel.liftSurvivorFrag()
+            return
+        }
+        if !frag.activePredators.isEmpty {
+            _ = viewModel.smushPest(frag.activePredators[0], on: frag.id)
+            return
         }
     }
 }

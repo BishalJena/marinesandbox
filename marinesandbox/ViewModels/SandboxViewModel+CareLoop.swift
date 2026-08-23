@@ -65,7 +65,8 @@ extension SandboxViewModel {
         let chance = min(1.0, (1.0 / 20.0) * elapsed * threatMultiplier)
 
         for frag in canvas.coralFrags {
-            guard !frag.isDead, (frag.isBaby || frag.isTeenager) else { continue }
+            // Protect unplanted floating frags and freshly dropped fragments (<0.20 growth) so corals can sprout before pests attack
+            guard !frag.isDead, frag.isPlanted, frag.growthProgress >= 0.20, (frag.isBaby || frag.isTeenager) else { continue }
             let existingCount = frag.activePredators.count + crawlingSnails.filter({ $0.targetFragID == frag.id }).count
             guard existingCount < Self.pestCapPerCoral else { continue }
             guard Double.random(in: 0...1) < chance else { continue }
@@ -95,7 +96,7 @@ extension SandboxViewModel {
             crawlingSnails[i].currentX = crawlingSnails[i].startX + (crawlingSnails[i].targetX - crawlingSnails[i].startX) * p
             if p >= 1.0 {
                 crawlingSnails[i].isArrived = true
-                if let frag = canvas.coralFrags.first(where: { $0.id == crawlingSnails[i].targetFragID }) {
+                if let frag = canvas.coralFrags.first(where: { $0.id == crawlingSnails[i].targetFragID }), frag.isPlanted, !frag.isDead {
                     if frag.activePredators.count < Self.pestCapPerCoral {
                         frag.activePredators.append("DrupellaSnail")
                     }
@@ -113,6 +114,7 @@ extension SandboxViewModel {
     public func removeCrawlingSnail(id: UUID) {
         crawlingSnails.removeAll(where: { $0.id == id })
         AudioPlayerService.shared.playSFX("pest_smush")
+        HapticService.shared.pestSmush()
     }
 
     public func dismissPestTooltip() {
@@ -125,6 +127,8 @@ extension SandboxViewModel {
         guard let frag = canvas?.coralFrags.first(where: { $0.id == fragID }),
               frag.activePredators.indices.contains(index) else { return nil }
         let pest = frag.activePredators.remove(at: index)
+        AudioPlayerService.shared.playSFX("pest_smush")
+        HapticService.shared.pestSmush()
         save()
         return pest
     }
@@ -135,6 +139,8 @@ extension SandboxViewModel {
         guard let frag = canvas?.coralFrags.first(where: { $0.id == fragID }),
               let index = frag.activePredators.firstIndex(of: pest) else { return false }
         frag.activePredators.remove(at: index)
+        AudioPlayerService.shared.playSFX("pest_smush")
+        HapticService.shared.pestSmush()
         save()
         return true
     }
@@ -143,7 +149,13 @@ extension SandboxViewModel {
     @discardableResult
     public func flickPest(_ pest: String, velocity: CGPoint, on fragID: UUID) -> Bool {
         _ = Physics.isFlick(velocity: velocity)
-        return smushPest(pest, on: fragID)
+        guard let frag = canvas?.coralFrags.first(where: { $0.id == fragID }),
+              let index = frag.activePredators.firstIndex(of: pest) else { return false }
+        frag.activePredators.remove(at: index)
+        AudioPlayerService.shared.playSFX("pest_flick")
+        HapticService.shared.pestFlick()
+        save()
+        return true
     }
 
     /// Toggles an agricultural runoff shock for the session.
