@@ -446,6 +446,13 @@ Integrated multi-species DotLottie 2.0 assets and species-specific growth rate s
 
 *Consequence:* True multi-species biological heterogeneity reflected visually and numerically.
 
+### DEC-041 — Official App Name: Reefora (formerly Marine Sandbox)
+**Status:** Accepted · **Source:** this session
+
+The official product name for the application is established as **Reefora** (formerly Interactive Marine Sandbox / Marine Sandbox).
+- **Rationale:** "Reefora" blends *Reef* (coral restoration core) and *Flora/Fauna/Agora* (living biodiversity gathering space), presenting a unique, memorable, and modern identity suited for exhibition showcase, App Store discovery, and conservation education.
+- **Consequence:** Documentation, PRD, TDD, and project overviews are updated with the official product name. The underlying repository, package bundle (`com.molamola.marinesandbox`), and target names remain stable to avoid refactoring churn.
+
 ---
 
 ## Technical Debt Register

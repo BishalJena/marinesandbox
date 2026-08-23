@@ -32,6 +32,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pro
 - Official `dotlottie-ios` runtime (ThorVG engine) and `LottieCoralView` renderer for paired 60-frame DotLottie 2.0 lifecycle assets: supporting Lottie 2.0 track mattes, theme slots, and continuous frame scrubbing from `growthProgress` (DEC-037, supersedes DEC-017).
 
 ### Changed
+- Established official application brand name as **Reefora** (formerly Marine Sandbox) across documentation and project specifications (DEC-041).
 - Scaled coral footprints to 2x canvas proportions with species-aware geometry (`BrainCoral` dome vs `StaghornCoral` branching) and locked dragging upon reaching the toddler stage (DEC-040).
 - Refactored `SandboxViewModel.swift` and `SandboxView.swift` to compose modular extensions and specialized SwiftUI views, preserving strict MVVM+S and Swift 6 concurrency compliance (DEC-039).
 - Standardized entire codebase for Swift 6 strict concurrency: marked static configuration constants and diagnostic helpers as `nonisolated`, eliminated actor boundary leakage across default argument evaluations, and verified Sendable conformance across domain models (DEC-038).
