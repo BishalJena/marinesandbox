@@ -44,13 +44,8 @@ struct SandboxView: View {
                     entityLayer(viewModel: viewModel, seabedY: seabedY)
 
                     if !PlaygroundMode.isEnabled {
-                        if viewModel.guidedPlantPhase == .awaitingRubbleClear {
-                            ColdOpenInstructionView(text: "Flick away the dead rubble to uncover the living coral!")
-                        } else if viewModel.guidedPlantPhase == .awaitingFragTap {
-                            ColdOpenInstructionView(text: "Drag the living fragment onto the sand to plant it!")
-                        } else if viewModel.guidedPlantPhase == .awaitingPlant {
+                        if viewModel.guidedPlantPhase == .awaitingPlant {
                             GuidePulseView(viewModel: viewModel, seabedY: seabedY, viewportWidth: geometry.size.width)
-                            ColdOpenInstructionView(text: "Drop the fragment onto the seabed!")
                         }
 
                         SandboxToolOverlayView(
@@ -252,11 +247,17 @@ struct SandboxView: View {
                         )
                     }
 
+                    let fallDistance = max(0, dropHeight - resting)
+                    let hitGroundDelay = fallDistance < 20 ? 0.05 : min(0.40, response * 0.35)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + hitGroundDelay) {
+                        AudioPlayerService.shared.playSFX("frag_plant")
+                    }
+
                     DispatchQueue.main.asyncAfter(
                         deadline: .now() + Physics.sinkSettleDuration(response: response)
                     ) {
                         withAnimation(.easeOut(duration: 0.2)) {
-                            viewModel.plantLiftedFrag()
+                            viewModel.plantLiftedFrag(playSound: false)
                         }
                     }
                 }

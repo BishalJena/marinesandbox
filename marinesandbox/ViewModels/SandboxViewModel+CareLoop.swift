@@ -39,10 +39,17 @@ extension SandboxViewModel {
     @discardableResult
     public func brushStroke(from start: CGPoint, to end: CGPoint, on fragID: UUID) -> [Int] {
         guard let frag = canvas?.coralFrags.first(where: { $0.id == fragID }) else { return [] }
+        let hadAlgae = frag.algaePercentage > 0.05
         var coverage = AlgaeCoverage(cells: frag.algaeCells)
         let cleared = coverage.clear(from: start, to: end)
-        frag.algaeCells = coverage.cells
-        save()
+        if !cleared.isEmpty {
+            frag.algaeCells = coverage.cells
+            AudioPlayerService.shared.playSFX("brush_swipe")
+            if hadAlgae && frag.algaePercentage <= 0.02 {
+                AudioPlayerService.shared.playSFX("sparkle_clean")
+            }
+            save()
+        }
         return cleared
     }
 

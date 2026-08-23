@@ -99,7 +99,7 @@ extension SandboxViewModel {
     }
 
     /// Drops the lifted frag (plant + settle feedback). Clamped to playable bounds.
-    public func plantLiftedFrag() {
+    public func plantLiftedFrag(playSound: Bool = true) {
         guard let canvas, let id = liftedFragID,
               let frag = canvas.coralFrags.first(where: { $0.id == id }) else { return }
         let drop = Physics.clampedDrop(liftedFragPosition, canvasWidth: canvas.canvasWidth)
@@ -108,7 +108,9 @@ extension SandboxViewModel {
         canvas.guidedPlantDone = true
         liftedFragID = nil
         rubblePieces.removeAll()
-        AudioPlayerService.shared.playSFX("frag_plant")
+        if playSound {
+            AudioPlayerService.shared.playSFX("frag_plant")
+        }
         save()
     }
 

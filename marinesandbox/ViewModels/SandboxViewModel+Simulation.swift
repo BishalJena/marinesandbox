@@ -28,7 +28,7 @@ extension SandboxViewModel {
     /// Activates the 10x simulation speed boost for the given duration (default: 30s).
     public func activate10xFastForward(duration: Double = 30.0) {
         fastForwardRemainingSeconds = duration
-        AudioPlayerService.shared.playSFX("sparkle_clean")
+        AudioPlayerService.shared.playSFX("tool_switch")
     }
 
     /// Sets whether debug 100x speed hold is active.
