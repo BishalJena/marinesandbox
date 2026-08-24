@@ -35,6 +35,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). The pro
 - Official `dotlottie-ios` runtime (ThorVG engine) and `LottieCoralView` renderer for paired 60-frame DotLottie 2.0 lifecycle assets: supporting Lottie 2.0 track mattes, theme slots, and continuous frame scrubbing from `growthProgress` (DEC-037, supersedes DEC-017).
 
 ### Fixed
+- Bottom-align DotLottie player content so Brain Coral expands upward from its model-space seabed anchor rather than visually growing from its centre.
+- Update lifecycle and geometry tests for species-specific DotLottie frame counts and current Staghorn footprints.
 - Fixed snail touch interactions with high-priority tap/drag gestures and enlarged 52x52pt hit target areas, preventing coral container drag gestures from swallowing snail taps.
 - Gated snail spawns to established planted corals (>= 20% growth) so players can watch newly placed fragments take root before pests attack.
 - Eliminated planting sound delay on touchdown and aligned brush swipe audio triggers during care loop cleaning.
