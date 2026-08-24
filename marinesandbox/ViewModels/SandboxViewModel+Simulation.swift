@@ -82,6 +82,7 @@ extension SandboxViewModel {
             )
         }
         commit(outcome)
+        emitAlgaeDangerWarnings()
         lottiePlaybackTargets = Dictionary(uniqueKeysWithValues: outcome.corals.map { ($0.id, $0.growthProgress) })
         if let canvas {
             for frag in canvas.coralFrags where !frag.isDead && (frag.isBaby || frag.isTeenager) {
